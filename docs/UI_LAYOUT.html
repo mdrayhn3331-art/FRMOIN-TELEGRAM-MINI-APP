@@ -1,0 +1,25 @@
+<!-- Basic Home layout to merge into index.html -->
+<section class="profile-stats glass">
+  <div><span>LEVEL</span><b id="level">Master</b></div>
+  <div><span>TRUST</span><b id="trustScore">50/100</b></div>
+  <div><span>STREAK</span><b id="dailyStreak">0 days</b></div>
+</section>
+
+<section class="action-grid">
+  <button class="action-btn" data-action="daily"><i>🔥</i><b>Daily Login</b><small>Keep your streak</small></button>
+  <button class="action-btn" data-action="tasks"><i>🎯</i><b>Social Tasks</b><small>Google • IG • TikTok • YouTube</small></button>
+  <button class="action-btn" data-action="withdraw"><i>💸</i><b>Wallet & Withdraw</b><small>bKash • USDT BEP20</small></button>
+  <button class="action-btn" data-action="invite"><i>👥</i><b>Invite Friends</b><small>20–25% commission</small></button>
+  <button class="action-btn" data-action="history"><i>📜</i><b>Transactions</b><small>View earning history</small></button>
+  <button class="action-btn" data-action="leaderboard"><i>🏆</i><b>Leaderboard</b><small>Top earners</small></button>
+</section>
+
+<!-- API integration pattern -->
+<script>
+async function loadProfile() {
+  const d = await api('profile');
+  document.querySelector('#level').textContent = d.user.level;
+  document.querySelector('#trustScore').textContent = `${d.user.trust_score}/100`;
+  document.querySelector('#dailyStreak').textContent = `${d.user.daily_streak} days`;
+}
+</script>
