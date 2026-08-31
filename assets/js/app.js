@@ -33,4 +33,33 @@ async function rewardAfterAd(adType, showAd){
 }
 async function showRewardedAd(){const status=document.getElementById('adStatus');status.textContent='Loading Monetag rewarded ad…';const showAd=await waitForMonetag();await rewardAfterAd('rewarded_interstitial',showAd);}
 document.getElementById('watchAd').addEventListener('click',async()=>{const button=document.getElementById('watchAd');button.disabled=true;try{await showRewardedAd();}catch(e){document.getElementById('adStatus').textContent=e.message==='MONETAG_NOT_READY'?'Ad is still loading. Please try again.':'Ad could not be completed. Please try again.';}finally{button.disabled=false;}});
+
+function popup(title, message){
+  if(tg?.showPopup){ tg.showPopup({title,message,buttons:[{id:'ok',type:'ok',text:'OK'}]}); }
+  else alert(`${title}\n\n${message}`);
+}
+
+document.querySelectorAll('.action-btn').forEach(btn=>btn.addEventListener('click',async()=>{
+  const action=btn.dataset.action;
+  if(action==='daily'){
+    try{
+      const showAd=await waitForMonetag();
+      await rewardAfterAd('rewarded_popup',()=>showAd('pop'));
+    }catch(e){popup('Daily Bonus','The rewarded ad is not ready yet. Please try again.');}
+    return;
+  }
+  if(action==='invite'){
+    const bot='https://t.me/frmoin_bot';
+    const share=`https://t.me/share/url?url=${encodeURIComponent(bot)}&text=${encodeURIComponent('Join FRMOIN Rewards and earn coins!')}`;
+    if(tg?.openTelegramLink) tg.openTelegramLink(share); else location.href=share;
+    return;
+  }
+  if(action==='withdraw'){ popup('Withdraw',`Current balance: ${state.balance.toLocaleString()} coins.\n\nWithdrawal module is ready to be connected to bKash/Nagad.`); return; }
+  if(action==='history'){ popup('Reward History',`You have earned ${state.total.toLocaleString()} coins in the loaded history.`); return; }
+  if(action==='tasks'){ popup('Daily Tasks','Daily task system is ready for the next setup step.'); return; }
+  if(action==='leaderboard'){ popup('Leaderboard','Leaderboard will be connected to the rewards database next.'); return; }
+  if(action==='promo'){ popup('Promo Code','Promo code system will be connected next.'); return; }
+  popup('More Rewards','More earning options are coming soon.');
+}));
+
 loadBalance(); render();
