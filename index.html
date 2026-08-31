@@ -7,7 +7,6 @@
   <title>FRMOIN Rewards</title>
   <link rel="stylesheet" href="assets/css/style.css">
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <!-- Monetag Telegram Mini App SDK -->
   <script src="//libtl.com/sdk.js" data-zone="11691259" data-sdk="show_11691259"></script>
 </head>
 <body>
@@ -23,15 +22,21 @@
       <div class="welcome">Welcome, <strong id="username">Guest</strong><span>Ready to earn?</span></div>
     </section>
 
+    <section class="profile-stats glass">
+      <div><span>LEVEL</span><b id="level">Master</b></div>
+      <div><span>TRUST</span><b id="trustScore">50/100</b></div>
+      <div><span>STREAK</span><b id="dailyStreak">0 days</b></div>
+    </section>
+
     <section class="balance-card glass">
       <span class="label">YOUR BALANCE</span>
-      <div class="balance"><span id="balance">0</span><small> COINS</small></div>
-      <div class="balance-sub">100 coins = 1 reward unit</div>
+      <div class="balance">$<span id="balance">0</span></div>
+      <div class="balance-sub">Live wallet balance</div>
     </section>
 
     <section class="reward-card glass">
       <div class="reward-icon">🎁</div>
-      <div class="reward-copy"><h2>Watch Ad & Earn</h2><p>Complete a rewarded ad to receive coins.</p></div>
+      <div class="reward-copy"><h2>Watch Ad & Earn</h2><p>Complete a rewarded Monetag ad to receive a server-approved reward.</p></div>
       <button id="watchAd" class="premium-btn">WATCH AD <span>→</span></button>
       <p id="adStatus" class="status">Monetag ad is loading…</p>
     </section>
@@ -39,14 +44,12 @@
     <section class="action-section">
       <div class="section-title"><span>QUICK ACTIONS</span><small>Earn & manage</small></div>
       <div class="action-grid">
-        <button class="action-btn" data-action="daily"><i>🎁</i><b>Daily Bonus</b><small>Claim reward</small></button>
-        <button class="action-btn" data-action="tasks"><i>🎯</i><b>Daily Tasks</b><small>Complete tasks</small></button>
-        <button class="action-btn" data-action="invite"><i>👥</i><b>Invite Friends</b><small>Share & earn</small></button>
-        <button class="action-btn" data-action="withdraw"><i>💰</i><b>Withdraw</b><small>bKash / Nagad</small></button>
-        <button class="action-btn" data-action="history"><i>📜</i><b>Reward History</b><small>View earnings</small></button>
+        <button class="action-btn" data-action="daily"><i>🔥</i><b>Daily Login</b><small>Keep your streak</small></button>
+        <button class="action-btn" data-action="tasks"><i>🎯</i><b>Social Tasks</b><small>Google • IG • TikTok • YouTube</small></button>
+        <button class="action-btn" data-action="invite"><i>👥</i><b>Invite Friends</b><small>20–25% commission</small></button>
+        <button class="action-btn" data-action="withdraw"><i>💸</i><b>Withdraw</b><small>bKash • USDT BEP20</small></button>
+        <button class="action-btn" data-action="history"><i>📜</i><b>Transactions</b><small>View earnings</small></button>
         <button class="action-btn" data-action="leaderboard"><i>🏆</i><b>Leaderboard</b><small>Top earners</small></button>
-        <button class="action-btn" data-action="promo"><i>🎟️</i><b>Promo Code</b><small>Enter code</small></button>
-        <button class="action-btn" data-action="more"><i>✨</i><b>More Rewards</b><small>Coming soon</small></button>
       </div>
     </section>
 
