@@ -1,56 +1,26 @@
 import { TonConnectUI } from 'https://esm.sh/@tonconnect/ui@2.2.0';
-
 const tg=window.Telegram?.WebApp;
 const SUPABASE_URL='https://fvuiisuzwezruxmlljty.supabase.co';
 const SUPABASE_KEY='sb_publishable_NC5zaQusqVNFdoi3d8s9Ow_5wbtQF1a';
 const REWARDS_API=`${SUPABASE_URL}/functions/v1/telegram-rewards`;
-const FAT_PER_USD=1000;
-const MIN_WITHDRAW_FAT=10000;
-const FREE_LIMIT=1000;
-const LEVELS=[0,1000,5000,25000,100000,500000];
-const LEVEL_PRICES_USD=[0,0.2,0.5,1,2,5];
-const state={balance:0,today:0,total:0,level:'Master',trust:50,streak:0,miningPoints:0,miningLevel:1,totalTaps:0,walletAddress:''};
-
-if(tg){tg.ready();tg.expand();tg.setHeaderColor('#070a12');tg.setBackgroundColor('#070a12');}
+const FAT_PER_USD=1000,MIN_WITHDRAW_FAT=10000,FREE_LIMIT=1000;
+const LEVEL_PRICES_USD=[0,.2,.5,1,2,5];
+const state={miningPoints:0,miningLevel:1,today:0,total:0,totalTaps:0,streak:0,walletAddress:'',trust:50};
+if(tg){tg.ready();tg.expand();tg.setHeaderColor('#071019');tg.setBackgroundColor('#071019');}
 const user=tg?.initDataUnsafe?.user;
-const usernameEl=document.getElementById('username');if(usernameEl)usernameEl.textContent=user?.first_name||'Guest';
-const avatarEl=document.getElementById('avatar');if(avatarEl)avatarEl.textContent=(user?.first_name?.[0]||'F').toUpperCase();
-const usd=v=>(Number(v||0)/FAT_PER_USD).toFixed(2);
-function render(){
-  const mp=document.getElementById('miningPoints');if(mp)mp.textContent=Number(state.miningPoints).toLocaleString();
-  const ml=document.getElementById('miningLevel');if(ml)ml.textContent=state.miningLevel;
-  const power=Math.pow(2,Math.max(0,state.miningLevel-1));
-  const p=document.getElementById('miningPower');if(p)p.textContent=`+${power} FAT / tap`;
-  const mr=document.getElementById('mineReward');if(mr)mr.textContent=`+${power} FAT`;
-  const next=LEVELS[state.miningLevel]||null;
-  const prev=LEVELS[state.miningLevel-1]||0;
-  const pct=next?Math.max(0,Math.min(100,((state.miningPoints-prev)/(next-prev))*100)):100;
-  const bar=document.getElementById('mineProgress');if(bar)bar.style.width=`${pct}%`;
-  const nr=document.getElementById('nextLevelReq');if(nr)nr.textContent=next?`${next.toLocaleString()} FAT`:'MAX LEVEL';
-  const level=document.getElementById('level');if(level)level.textContent=state.miningLevel;
-  const trust=document.getElementById('trustScore');if(trust)trust.textContent=`${state.trust}/100`;
-  const streak=document.getElementById('dailyStreak');if(streak)streak.textContent=`${state.streak} days`;
-  const today=document.getElementById('today');if(today)today.textContent=`${Number(state.today).toLocaleString()} FAT`;
-  const total=document.getElementById('total');if(total)total.textContent=`${Number(state.total).toLocaleString()} FAT`;
-  const taps=document.getElementById('totalTaps');if(taps)taps.textContent=Number(state.totalTaps).toLocaleString();
-}
-async function api(action,extra={}){if(!tg?.initData)throw new Error('Open this app from Telegram.');const r=await fetch(REWARDS_API,{method:'POST',headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY},body:JSON.stringify({action,initData:tg.initData,...extra})});let data={};try{data=await r.json();}catch{}if(!r.ok||!data.ok)throw new Error(data.error||`API_ERROR_${r.status}`);return data;}
-async function loadBalance(){try{const d=await api('balance');state.balance=Number(d.wallet?.coins??d.wallet?.balance??0)*FAT_PER_USD;const h=d.history||[];state.total=h.reduce((s,x)=>s+Number(x.points??x.amount??0),0);state.today=h.filter(x=>new Date(x.created_at).toDateString()===new Date().toDateString()).reduce((s,x)=>s+Number(x.points??x.amount??0),0);render();}catch(e){console.info('Balance:',e.message);}}
-async function loadProfile(){try{const d=await api('profile');if(d.user){state.level=d.user.level||state.level;state.trust=Number(d.user.trust_score??state.trust);state.streak=Number(d.user.daily_streak??state.streak);state.miningPoints=Number(d.user.mining_points??0);state.miningLevel=Number(d.user.mining_level??d.user.level??1);state.totalTaps=Number(d.user.total_taps??0);state.walletAddress=d.user.wallet_address||'';render();}}catch(e){console.info('Profile:',e.message);}}
-function popup(title,message){if(tg?.showPopup)tg.showPopup({title,message,buttons:[{id:'ok',type:'ok',text:'OK'}]});else alert(`${title}\n\n${message}`);}
-
-async function mine(){const btn=document.getElementById('mineButton');const status=document.getElementById('mineStatus');if(!user||btn?.disabled)return;if(state.miningPoints>=FREE_LIMIT&&state.miningLevel===1){popup('Free Mining Limit','Free Active is limited to 1,000 FAT COIN. Buy a level with TON to continue mining.');return;}if(btn)btn.disabled=true;try{const d=await api('mine');if(d.user){state.miningPoints=Number(d.user.mining_points);state.miningLevel=Number(d.user.mining_level);state.totalTaps=Number(d.user.total_taps);render();}if(status)status.textContent=`⛏ +${d.earned} FAT mined`;tg?.HapticFeedback?.impactOccurred('light');}catch(e){if(status)status.textContent=`❌ ${e.message}`;}finally{if(btn)btn.disabled=false;}}
+document.getElementById('username')?.replaceChildren(document.createTextNode(user?.first_name||'FRMOIN_USER'));
+document.getElementById('avatar')?.replaceChildren(document.createTextNode((user?.first_name?.[0]||'F').toUpperCase()));
+function popup(title,message){if(tg?.showPopup)tg.showPopup({title,message,buttons:[{id:'ok',type:'ok',text:'OK'}]});else alert(title+'\n\n'+message)}
+function render(){const p=document.getElementById('miningPoints');if(p)p.textContent=state.miningPoints.toLocaleString();const l=document.getElementById('level');if(l)l.textContent=state.miningLevel;const l2=document.getElementById('level2');if(l2)l2.textContent=state.miningLevel;const power=Math.max(1,Math.pow(2,state.miningLevel-1));const mp=document.getElementById('miningPower');if(mp)mp.textContent=power;const t=document.getElementById('today');if(t)t.textContent=state.today.toLocaleString()+' FAT';const total=document.getElementById('total');if(total)total.textContent=state.total.toLocaleString()+' FAT';const taps=document.getElementById('totalTaps');if(taps)taps.textContent=state.totalTaps.toLocaleString();const streak=document.getElementById('dailyStreak');if(streak)streak.textContent=state.streak+' Days';const status=document.getElementById('mineStatus');if(status)status.textContent=state.miningLevel===1?'Free Active: mine up to 1,000 FAT COIN.':'Level '+state.miningLevel+' Active: '+power+' FAT / tap';}
+async function api(action,extra={}){if(!tg?.initData)throw new Error('Open FRMOIN from Telegram.');const r=await fetch(REWARDS_API,{method:'POST',headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY},body:JSON.stringify({action,initData:tg.initData,...extra})});let d={};try{d=await r.json()}catch{}if(!r.ok||!d.ok)throw new Error(d.error||'Request failed');return d}
+async function load(){try{const [b,p]=await Promise.all([api('balance'),api('profile')]);const h=b.history||[];state.total=h.reduce((s,x)=>s+Number(x.points??x.amount??0),0);state.today=h.filter(x=>new Date(x.created_at).toDateString()===new Date().toDateString()).reduce((s,x)=>s+Number(x.points??x.amount??0),0);if(p.user){state.miningPoints=Number(p.user.mining_points??0);state.miningLevel=Number(p.user.mining_level??p.user.level??1);state.totalTaps=Number(p.user.total_taps??0);state.streak=Number(p.user.daily_streak??0);state.walletAddress=p.user.wallet_address||''}render()}catch(e){console.info('FRMOIN load',e.message);render()}}
+async function mine(){if(!user)return popup('Telegram Required','Open the Mini App from Telegram.');if(state.miningLevel===1&&state.miningPoints>=FREE_LIMIT)return popup('Free Mining Limit','Free Active is limited to 1,000 FAT COIN. Buy a level to continue.');const btn=document.getElementById('mineButton');if(btn)btn.disabled=true;try{const d=await api('mine');if(d.user){state.miningPoints=Number(d.user.mining_points??state.miningPoints);state.miningLevel=Number(d.user.mining_level??state.miningLevel);state.totalTaps=Number(d.user.total_taps??state.totalTaps)}render();tg?.HapticFeedback?.impactOccurred('light')}catch(e){popup('Mining',e.message)}finally{if(btn)btn.disabled=false}}
+async function daily(){try{const d=await api('daily_reward');if(d.user){state.miningPoints=Number(d.user.mining_points??state.miningPoints);state.streak=Number(d.user.daily_streak??state.streak)}popup('Daily Reward','🎁 Reward claimed successfully!');render()}catch(e){popup('Daily Reward',e.message)}}
+async function invite(){const fallback=`https://t.me/frmoin_bot?start=ref_${user?.id||''}`;try{const d=await api('referral');const link=d.invite_link||fallback;try{await navigator.clipboard.writeText(link)}catch{}if(tg?.openTelegramLink)tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent('Join FRMOIN Miner and earn FAT COIN!')}`);else popup('Referral Link',link)}catch{popup('Referral Link',fallback)}}
+async function showLevels(){const next=Math.min(6,state.miningLevel+1);if(next>6)return popup('Level','You are at the maximum level.');const price=LEVEL_PRICES_USD[next-1]??0;popup('Buy Level '+next,`Price: $${price.toFixed(3)}\nPayment: TON\n\nSend the exact checkout amount. Level activates automatically only after verified on-chain payment.`)}
+async function withdraw(){if(!state.walletAddress)return popup('TON Wallet','Connect your TON wallet first.');if(state.miningPoints<MIN_WITHDRAW_FAT)return popup('Withdraw TON','Minimum withdrawal is 10,000 FAT COIN ($10).');try{await api('withdraw',{method:'ton',walletAddress:state.walletAddress,amountFat:MIN_WITHDRAW_FAT});popup('Withdrawal','Withdrawal request submitted. On-chain payout requires the configured treasury service.')}catch(e){popup('Withdraw TON',e.message)}}
+document.querySelectorAll('[data-action]').forEach(el=>el.addEventListener('click',()=>{const a=el.dataset.action;if(a==='daily')daily();else if(a==='invite')invite();else if(a==='levels')showLevels();else if(a==='withdraw')withdraw();else if(a==='tasks')location.href='tasks.html';else if(a==='profile')popup('Profile',`Level ${state.miningLevel}\n${state.miningPoints.toLocaleString()} FAT COIN`)}));
 document.getElementById('mineButton')?.addEventListener('click',mine);
-
-async function invite(){const fallback=`https://t.me/frmoin_bot?start=ref_${user?.id||''}`;try{const d=await api('referral');const link=d.invite_link||fallback;const share=`https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent('Join FRMOIN Miner and earn FAT COIN!')}`;try{await navigator.clipboard.writeText(link);}catch{}if(tg?.openTelegramLink)tg.openTelegramLink(share);else location.href=share;popup('Referral Link',`${link}\n\nYour invite link is ready.`);}catch(e){popup('Referral Link',fallback);}}
-
-async function showLevels(){const rows=LEVEL_PRICES_USD.slice(1).map((p,i)=>`Level ${i+1}: $${p.toFixed(3)} = TON equivalent at checkout`).join('\n');popup('Buy Level',`Pay with TON. After on-chain payment verification, the purchased level is activated automatically.\n\n${rows}`);}
-async function withdraw(){if(!state.walletAddress){popup('TON Wallet','Connect your TON wallet first.');return;}if(state.miningPoints<MIN_WITHDRAW_FAT){popup('Withdraw TON',`Minimum withdrawal is 10,000 FAT COIN ($10).\nCurrent: ${state.miningPoints.toLocaleString()} FAT COIN.`);return;}try{const d=await api('withdraw',{method:'ton',walletAddress:state.walletAddress,amountFat:state.miningPoints});popup('Withdrawal Submitted',`Your TON withdrawal request was created for ${state.miningPoints.toLocaleString()} FAT COIN. Automatic payout requires the configured treasury and on-chain verification service.`);console.info(d);}catch(e){popup('Withdraw TON',e.message);}}
-
-document.querySelectorAll('.action-btn').forEach(btn=>btn.addEventListener('click',async()=>{const a=btn.dataset.action;if(a==='invite'){await invite();return;}if(a==='levels'){await showLevels();return;}if(a==='withdraw'){await withdraw();return;}if(a==='history'){popup('Reward History',`Total earned: ${Number(state.total).toLocaleString()} FAT COIN`);return;}popup('FRMOIN',`Selected: ${a||'option'}`)}));
-
-let tonConnect=null;
-try{tonConnect=new TonConnectUI({manifestUrl:`${location.origin}/tonconnect-manifest.json`,buttonRootId:'tonConnect'});tonConnect.onStatusChange(async wallet=>{const status=document.getElementById('walletStatus');if(wallet){state.walletAddress=wallet.account.address;if(status)status.textContent=`Connected: ${wallet.account.address.slice(0,8)}…${wallet.account.address.slice(-6)}`;try{const d=await api('wallet',{walletAddress:wallet.account.address});if(d.user)state.walletAddress=d.user.wallet_address||wallet.account.address;}catch(e){console.info('Wallet save:',e.message);}}else{state.walletAddress='';if(status)status.textContent='Connect your wallet';}});}catch(e){console.info('TON Connect:',e.message);}
-document.getElementById('tonConnect')?.addEventListener('click',()=>{try{tonConnect?.openModal();}catch(e){popup('TON Wallet',e.message);}});
-
-loadBalance();loadProfile();render();
+let tonConnect=null;try{tonConnect=new TonConnectUI({manifestUrl:`${location.origin}/tonconnect-manifest.json`,buttonRootId:'tonConnect'});tonConnect.onStatusChange(async wallet=>{const s=document.getElementById('walletStatus');if(wallet){state.walletAddress=wallet.account.address;if(s)s.textContent=`Connected: ${wallet.account.address.slice(0,8)}…${wallet.account.address.slice(-6)}`;try{await api('wallet',{walletAddress:wallet.account.address})}catch(e){console.info('wallet save',e.message)}}else{state.walletAddress='';if(s)s.textContent='Connect your TON wallet'}})}catch(e){console.info('TON Connect',e.message)}
+document.getElementById('tonConnect')?.addEventListener('click',()=>tonConnect?.openModal());
+load();
