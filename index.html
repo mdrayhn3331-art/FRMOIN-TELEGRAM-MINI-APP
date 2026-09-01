@@ -1,10 +1,48 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#080b14"><title>FRMOIN Rewards</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+  <meta name="theme-color" content="#070a12">
+  <title>FRMOIN Miner</title>
   <link rel="stylesheet" href="assets/css/style.css">
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <!-- Monetag: In-App Interstitial auto ads. These ads are monetization-only and never call the reward API. -->
   <script src="//libtl.com/sdk.js" data-zone="11691259" data-sdk="show_11691259" data-auto="10/1/60/15/0"></script>
 </head>
-<body><div class="bg-orb orb-a"></div><div class="bg-orb orb-b"></div><main class="app-shell"><header class="topbar"><div class="brand"><span class="brand-icon">F</span><div><b>FRMOIN</b><small>REWARDS</small></div></div><div class="status-dot">●</div></header><section class="hero glass"><div class="avatar" id="avatar">F</div><div class="welcome">Welcome, <strong id="username">Guest</strong><span>Ready to earn?</span></div></section><section class="profile-stats glass"><div><span>LEVEL</span><b id="level">Master</b></div><div><span>TRUST</span><b id="trustScore">50/100</b></div><div><span>STREAK</span><b id="dailyStreak">0 days</b></div></section><section class="balance-card glass"><span class="label">YOUR BALANCE</span><div class="balance">$<span id="balance">0</span></div><div class="balance-sub">Live wallet balance</div></section><section class="reward-card glass"><div class="reward-icon">🎁</div><div class="reward-copy"><h2>Watch Ad & Earn</h2><p>Complete a rewarded Monetag ad to receive a server-approved reward.</p></div><button id="watchAd" class="premium-btn">WATCH AD <span>→</span></button><p id="adStatus" class="status">Rewarded ad is ready when available.</p></section><section class="action-section"><div class="section-title"><span>QUICK ACTIONS</span><small>Earn & manage</small></div><div class="action-grid"><a class="action-btn" href="tasks.html" style="text-decoration:none"><i>🎯</i><b>Social Tasks</b><small>Google • IG • TikTok • YouTube</small></a><button class="action-btn" data-action="daily"><i>🔥</i><b>Daily Login</b><small>Keep your streak</small></button><button class="action-btn" data-action="invite"><i>👥</i><b>Invite Friends</b><small>20–25% commission</small></button><button class="action-btn" data-action="withdraw"><i>💸</i><b>Withdraw</b><small>bKash • USDT BEP20</small></button><button class="action-btn" data-action="history"><i>📜</i><b>Transactions</b><small>View earnings</small></button><button class="action-btn" data-action="leaderboard"><i>🏆</i><b>Leaderboard</b><small>Top earners</small></button></div></section><section class="quick-grid"><div class="mini-card glass"><b id="today">0</b><span>Today</span></div><div class="mini-card glass"><b id="total">0</b><span>Total Earned</span></div><div class="mini-card glass"><b>24/7</b><span>Availability</span></div></section><footer>Telegram Mini App • FRMOIN</footer></main><script src="assets/js/app.js"></script></body></html>
+<body>
+<div class="bg-orb orb-a"></div><div class="bg-orb orb-b"></div>
+<main class="app-shell">
+  <header class="topbar"><div class="brand"><span class="brand-icon">F</span><div><b>FRMOIN</b><small>MINER</small></div></div><div class="status-dot">●</div></header>
+
+  <section class="hero glass"><div class="avatar" id="avatar">F</div><div class="welcome">Welcome, <strong id="username">Guest</strong><span>Ready to mine?</span></div></section>
+
+  <section class="profile-stats glass">
+    <div><span>LEVEL</span><b id="level">1</b></div><div><span>TRUST</span><b id="trustScore">50/100</b></div><div><span>STREAK</span><b id="dailyStreak">0 days</b></div>
+  </section>
+
+  <section class="balance-card glass"><span class="label">MINING POINTS</span><div class="balance"><span id="miningPoints">0</span></div><div class="balance-sub">$FRM Points • Level <span id="miningLevel">1</span></div></section>
+
+  <section class="mining-card glass">
+    <div class="mining-head"><div><b>Mining Power</b><span id="miningPower">+1 / tap</span></div><div><b id="nextLevelText">Next Level</b><span id="nextLevelReq">1,000 pts</span></div></div>
+    <div class="mine-progress"><div id="mineProgress"></div></div>
+    <button id="mineButton" class="mine-button"><span class="mine-coin">⛏</span><b>MINE</b><small id="mineReward">+1 POINT</small></button>
+    <p id="mineStatus" class="status">Tap to mine. Server controls your points.</p>
+  </section>
+
+  <section class="wallet-card glass"><div><b>TON Wallet</b><small id="walletStatus">Connect your wallet</small></div><button id="tonConnect" class="premium-btn">CONNECT</button></section>
+
+  <section class="reward-card glass"><div class="reward-icon">🎁</div><div class="reward-copy"><h2>Daily Reward</h2><p>Claim once every 24 hours and grow your streak.</p></div><button id="dailyButton" class="premium-btn">CLAIM <span>→</span></button></section>
+
+  <section class="action-section"><div class="section-title"><span>QUICK ACTIONS</span><small>Earn & manage</small></div><div class="action-grid">
+    <a class="action-btn" href="tasks.html" style="text-decoration:none"><i>🎯</i><b>Social Tasks</b><small>Google • IG • TikTok • YouTube</small></a>
+    <button class="action-btn" data-action="invite"><i>👥</i><b>Invite Friends</b><small>20–25% commission</small></button>
+    <button class="action-btn" data-action="withdraw"><i>💸</i><b>Withdraw</b><small>bKash • USDT BEP20</small></button>
+    <button class="action-btn" data-action="history"><i>📜</i><b>Transactions</b><small>View earnings</small></button>
+    <button class="action-btn" data-action="leaderboard"><i>🏆</i><b>Leaderboard</b><small>Top miners</small></button>
+  </div></section>
+
+  <section class="quick-grid"><div class="mini-card glass"><b id="today">0</b><span>Today</span></div><div class="mini-card glass"><b id="total">0</b><span>Total Earned</span></div><div class="mini-card glass"><b id="totalTaps">0</b><span>Total Taps</span></div></section>
+  <footer>Telegram Mini App • FRMOIN Miner</footer>
+</main>
+<script type="module" src="assets/js/app.js"></script>
+</body></html>
