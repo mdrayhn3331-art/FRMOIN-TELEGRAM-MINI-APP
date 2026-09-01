@@ -42,11 +42,9 @@ async function mine(){const btn=document.getElementById('mineButton');const stat
 
 document.getElementById('mineButton')?.addEventListener('click',mine);
 
-document.getElementById('dailyButton')?.addEventListener('click',async()=>{try{const d=await api('daily_login');state.balance=Number(d.wallet?.balance??state.balance);state.streak=Number(d.streak??state.streak);state.today+=Number(d.reward||0);render();popup('Daily Login',d.already_claimed?`Already claimed today. Streak: ${d.streak}`:`+$${usd(d.reward||0)} added. Streak: ${d.streak}`);}catch(e){popup('Daily Login',e.message);}});
-
 async function invite(){const fallback=`https://t.me/frmoin_bot?start=ref_${user?.id||''}`;try{const d=await api('referral');const link=d.invite_link||fallback;const share=`https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent('Join FRMOIN Miner and earn points!')}`;try{await navigator.clipboard.writeText(link);}catch{}if(tg?.openTelegramLink)tg.openTelegramLink(share);else location.href=share;popup('Referral Link',`${link}\n\nYour invite link is ready.`);}catch(e){popup('Referral Link',fallback);}}
 
-document.querySelectorAll('.action-btn').forEach(btn=>btn.addEventListener('click',async()=>{const a=btn.dataset.action;if(a==='invite'){await invite();return;}if(a==='withdraw'){if(state.balance<MIN_WITHDRAW){popup('Withdraw',`Minimum withdrawal is $1.00.\nCurrent balance: $${usd(state.balance)}`);return;}popup('Withdraw',`Available: $${usd(state.balance)}\nMinimum: $1.00\nMethods: bKash / USDT BEP20`);return;}if(a==='history'){popup('Reward History',`Total rewards: $${usd(state.total)}`);return;}popup('FRMOIN',`Selected: ${a||'option'}`);}));
+document.querySelectorAll('.action-btn').forEach(btn=>btn.addEventListener('click',async()=>{const a=btn.dataset.action;if(a==='invite'){await invite();return;}if(a==='withdraw'){if(state.balance<MIN_WITHDRAW){popup('Withdraw',`Minimum withdrawal is $1.00.\nCurrent balance: $${usd(state.balance)}`);return;}popup('Withdraw',`Available: $${usd(state.balance)}\nMinimum: $1.00\nMethods: bKash / USDT BEP20`);return;}if(a==='history'){popup('Reward History',`Total rewards: $${usd(state.total)}`);return;}popup('FRMOIN',`Selected: ${a||'option'}`)}));
 
 /* TON Connect */
 let tonConnect=null;
